@@ -4,33 +4,43 @@
     <meta charset="utf-8">
     <title>Market Tracker</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 40px; background: #f9f9f9; }
-        h1 { color: #333; }
+        body  { font-family: Arial, sans-serif; padding: 40px;
+                background: #f9f9f9; }
+        h1    { color: #333; }
 
-        .tabs { display: flex; gap: 0; margin-bottom: 0; }
+        /* ── Tab bar ── */
+        .tabs { margin-bottom: 20px; }
         .tabs button {
-            padding: 10px 24px;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            background: #e0e0e0;
-            cursor: pointer;
-            font-size: 14px;
+            padding: 10px 24px; margin-right: 6px; cursor: pointer;
+            background: #ddd; border: none; font-size: 14px;
             border-radius: 4px 4px 0 0;
         }
-        .tabs button.active {
-            background: #333;
-            color: white;
-            border-color: #333;
-        }
-        .tabs button:hover:not(.active) { background: #d0d0d0; }
+        .tabs button.active { background: #333; color: white; }
 
-        .tabcontent { display: none; }
+        /* ── Tab panels ── */
+        .tabcontent        { display: none; }
         .tabcontent.active { display: block; }
 
-        table { border-collapse: collapse; width: 70%; background: white; border: 1px solid #ddd; }
-        th, td { padding: 12px 20px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #333; color: white; }
-        tr:hover { background-color: #f1f1f1; }
+        /* ── Tables ── */
+        table      { border-collapse: collapse; width: 60%; background: white; }
+        table.wide { width: 75%; }
+        th, td     { padding: 12px 20px; border: 1px solid #ddd; text-align: left; }
+        th         { background-color: #333; color: white; }
+        tr:hover   { background-color: #f1f1f1; }
+
+        /* ── Commodity category sub-headers ── */
+        tr.cat-header td {
+            background-color: #555;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+            padding: 8px 20px;
+        }
+        tr.cat-header:hover td { background-color: #555; }
+
+        /* ── Commodity name indent ── */
+        td.indent { padding-left: 32px; }
+
         .updated { margin-top: 12px; font-size: 13px; color: #888; }
     </style>
 </head>
@@ -38,175 +48,70 @@
     <h1>Market Tracker</h1>
 
     <div class="tabs">
-        <button class="active" onclick="showTab('stocks', this)">Stocks</button>
-        <button onclick="showTab('commodities', this)">Commodities</button>
+        <button onclick="showTab(event,'stocks')"      class="active">Stocks</button>
+        <button onclick="showTab(event,'commodities')">Commodities</button>
     </div>
 
-    <div id="stocks" class="tabcontent active">
-        <table>
-<tr><th>Name</th><th>Price</th><th>Change</th><th>% Change</th></tr>
-<tr>
-            <td>AAPL</td>
-            <td>$270.23</td>
-            <td style="color:green">▲ 6.83</td>
-            <td style="color:green">2.59%</td>
-            </tr>
-<tr>
-            <td>MSFT</td>
-            <td>$422.79</td>
-            <td style="color:green">▲ 2.53</td>
-            <td style="color:green">0.6%</td>
-            </tr>
-<tr>
-            <td>NVDA</td>
-            <td>$201.68</td>
-            <td style="color:green">▲ 3.33</td>
-            <td style="color:green">1.68%</td>
-            </tr>
-<tr>
-            <td>GOOGL</td>
-            <td>$341.68</td>
-            <td style="color:green">▲ 5.66</td>
-            <td style="color:green">1.68%</td>
-            </tr>
-<tr>
-            <td>AMZN</td>
-            <td>$250.56</td>
-            <td style="color:green">▲ 0.86</td>
-            <td style="color:green">0.34%</td>
-            </tr>
-</table>
-    </div>
-    <div id="commodities" class="tabcontent">
-        <table>
-<tr><th>Name</th><th>Ticker</th><th>Price</th><th>Change</th><th>% Change</th></tr>
-<tr>
-            <td>Crude Oil (WTI)</td><td>CL=F</td>
-            <td>$83.85</td>
-            <td style="color:red">▼ 10.84</td>
-            <td style="color:red">-11.45%</td>
-            </tr>
-<tr>
-            <td>Brent Crude</td><td>BZ=F</td>
-            <td>$90.38</td>
-            <td style="color:red">▼ 9.01</td>
-            <td style="color:red">-9.07%</td>
-            </tr>
-<tr>
-            <td>Natural Gas</td><td>NG=F</td>
-            <td>$2.67</td>
-            <td style="color:green">▲ 0.02</td>
-            <td style="color:green">0.75%</td>
-            </tr>
-<tr>
-            <td>Gold</td><td>GC=F</td>
-            <td>$4857.6</td>
-            <td style="color:green">▲ 72.2</td>
-            <td style="color:green">1.51%</td>
-            </tr>
-<tr>
-            <td>Silver</td><td>SI=F</td>
-            <td>$81.74</td>
-            <td style="color:green">▲ 3.13</td>
-            <td style="color:green">3.98%</td>
-            </tr>
-<tr>
-            <td>Copper</td><td>HG=F</td>
-            <td>$6.1</td>
-            <td style="color:green">▲ 0.03</td>
-            <td style="color:green">0.49%</td>
-            </tr>
-<tr>
-            <td>Platinum</td><td>PL=F</td>
-            <td>$2124.5</td>
-            <td style="color:green">▲ 30.4</td>
-            <td style="color:green">1.45%</td>
-            </tr>
-<tr>
-            <td>Palladium</td><td>PA=F</td>
-            <td>$1590.4</td>
-            <td style="color:green">▲ 19.9</td>
-            <td style="color:green">1.27%</td>
-            </tr>
-<tr>
-            <td>Aluminum</td><td>ALI=F</td>
-            <td>$3596.75</td>
-            <td style="color:red">▼ 51.0</td>
-            <td style="color:red">-1.4%</td>
-            </tr>
-<tr>
-            <td>Wheat</td><td>ZW=F</td>
-            <td>$591.25</td>
-            <td style="color:red">▼ 7.25</td>
-            <td style="color:red">-1.21%</td>
-            </tr>
-<tr>
-            <td>Corn</td><td>ZC=F</td>
-            <td>$448.75</td>
-            <td style="color:green">▲ 0.25</td>
-            <td style="color:green">0.06%</td>
-            </tr>
-<tr>
-            <td>Soybeans</td><td>ZS=F</td>
-            <td>$1167.25</td>
-            <td style="color:green">▲ 3.5</td>
-            <td style="color:green">0.3%</td>
-            </tr>
-<tr>
-            <td>Sugar</td><td>SB=F</td>
-            <td>$13.31</td>
-            <td style="color:red">▼ 0.35</td>
-            <td style="color:red">-2.56%</td>
-            </tr>
-<tr>
-            <td>Coffee</td><td>KC=F</td>
-            <td>$289.3</td>
-            <td style="color:red">▼ 7.15</td>
-            <td style="color:red">-2.41%</td>
-            </tr>
-<tr>
-            <td>Cocoa</td><td>CC=F</td>
-            <td>$3186.0</td>
-            <td style="color:red">▼ 181.0</td>
-            <td style="color:red">-5.38%</td>
-            </tr>
-<tr>
-            <td>Cotton</td><td>CT=F</td>
-            <td>$77.4</td>
-            <td style="color:green">▲ 1.7</td>
-            <td style="color:green">2.25%</td>
-            </tr>
-<tr><td>Lumber</td><td>LBS=F</td><td colspan='2'>Data unavailable</td></tr>
-<tr>
-            <td>Heating Oil</td><td>HO=F</td>
-            <td>$3.4</td>
-            <td style="color:red">▼ 0.43</td>
-            <td style="color:red">-11.23%</td>
-            </tr>
-<tr>
-            <td>Gasoline (RBOB)</td><td>RB=F</td>
-            <td>$3.0</td>
-            <td style="color:red">▼ 0.16</td>
-            <td style="color:red">-5.06%</td>
-            </tr>
-<tr>
-            <td>Rough Rice</td><td>ZR=F</td>
-            <td>$1110.0</td>
-            <td style="color:green">▲ 26.5</td>
-            <td style="color:green">2.45%</td>
-            </tr>
-</table>
-    </div>
+    <div id="stocks"      class="tabcontent active">    <table>
+        <tr><th>Ticker</th><th>Price</th><th>Change</th><th>% Change</th></tr>
+        <tr><td>AAPL</td><td>$270.23</td><td style='color:green'>▲ 6.83</td><td style='color:green'>2.59%</td></tr>
+        <tr><td>MSFT</td><td>$422.79</td><td style='color:green'>▲ 2.53</td><td style='color:green'>0.6%</td></tr>
+        <tr><td>NVDA</td><td>$201.68</td><td style='color:green'>▲ 3.33</td><td style='color:green'>1.68%</td></tr>
+        <tr><td>GOOGL</td><td>$341.68</td><td style='color:green'>▲ 5.66</td><td style='color:green'>1.68%</td></tr>
+        <tr><td>AMZN</td><td>$250.56</td><td style='color:green'>▲ 0.86</td><td style='color:green'>0.34%</td></tr>
+    </table></div>
+    <div id="commodities" class="tabcontent">    <table class='wide'>
+        <tr><th>Commodity</th><th>Price</th><th>Change</th><th>% Change</th></tr>
+        <tr class='cat-header'><td colspan='4'>Energy</td></tr>
+        <tr><td class='indent'>Crude Oil (WTI)</td><td>$83.85</td><td style='color:red'>▼ -10.84</td><td style='color:red'>-11.45%</td></tr>
+        <tr><td class='indent'>Crude Oil (Brent)</td><td>$90.38</td><td style='color:red'>▼ -9.01</td><td style='color:red'>-9.07%</td></tr>
+        <tr><td class='indent'>Natural Gas</td><td>$2.67</td><td style='color:green'>▲ 0.02</td><td style='color:green'>0.75%</td></tr>
+        <tr><td class='indent'>Gasoline (RBOB)</td><td>$3.0</td><td style='color:red'>▼ -0.16</td><td style='color:red'>-5.06%</td></tr>
+        <tr><td class='indent'>Heating Oil</td><td>$3.4</td><td style='color:red'>▼ -0.43</td><td style='color:red'>-11.23%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Precious Metals</td></tr>
+        <tr><td class='indent'>Gold</td><td>$4857.6</td><td style='color:green'>▲ 72.2</td><td style='color:green'>1.51%</td></tr>
+        <tr><td class='indent'>Silver</td><td>$81.74</td><td style='color:green'>▲ 3.13</td><td style='color:green'>3.98%</td></tr>
+        <tr><td class='indent'>Platinum</td><td>$2124.5</td><td style='color:green'>▲ 30.4</td><td style='color:green'>1.45%</td></tr>
+        <tr><td class='indent'>Palladium</td><td>$1590.4</td><td style='color:green'>▲ 19.9</td><td style='color:green'>1.27%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Industrial Metals</td></tr>
+        <tr><td class='indent'>Copper</td><td>$6.1</td><td style='color:green'>▲ 0.03</td><td style='color:green'>0.49%</td></tr>
+        <tr><td class='indent'>Aluminum</td><td>$3596.75</td><td style='color:red'>▼ -51.0</td><td style='color:red'>-1.4%</td></tr>
+        <tr><td class='indent'>Steel (HRC)</td><td>$8.0</td><td style='color:green'>▲ 0.0</td><td style='color:green'>0.0%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Grains & Oilseeds</td></tr>
+        <tr><td class='indent'>Wheat</td><td>$591.25</td><td style='color:red'>▼ -7.25</td><td style='color:red'>-1.21%</td></tr>
+        <tr><td class='indent'>Corn</td><td>$448.75</td><td style='color:green'>▲ 0.25</td><td style='color:green'>0.06%</td></tr>
+        <tr><td class='indent'>Soybeans</td><td>$1167.25</td><td style='color:green'>▲ 3.5</td><td style='color:green'>0.3%</td></tr>
+        <tr><td class='indent'>Rough Rice</td><td>$1110.0</td><td style='color:green'>▲ 26.5</td><td style='color:green'>2.45%</td></tr>
+        <tr><td class='indent'>Oats</td><td>$331.5</td><td style='color:red'>▼ -14.5</td><td style='color:red'>-4.19%</td></tr>
+        <tr><td class='indent'>Soybean Oil</td><td>$68.16</td><td style='color:red'>▼ -1.17</td><td style='color:red'>-1.69%</td></tr>
+        <tr><td class='indent'>Soybean Meal</td><td>$331.8</td><td style='color:red'>▼ -0.9</td><td style='color:red'>-0.27%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Soft Commodities</td></tr>
+        <tr><td class='indent'>Coffee</td><td>$289.3</td><td style='color:red'>▼ -7.15</td><td style='color:red'>-2.41%</td></tr>
+        <tr><td class='indent'>Cocoa</td><td>$3186.0</td><td style='color:red'>▼ -181.0</td><td style='color:red'>-5.38%</td></tr>
+        <tr><td class='indent'>Sugar</td><td>$13.31</td><td style='color:red'>▼ -0.35</td><td style='color:red'>-2.56%</td></tr>
+        <tr><td class='indent'>Cotton</td><td>$77.4</td><td style='color:green'>▲ 1.7</td><td style='color:green'>2.25%</td></tr>
+        <tr><td class='indent'>Orange Juice</td><td>$186.1</td><td style='color:green'>▲ 10.0</td><td style='color:green'>5.68%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Livestock</td></tr>
+        <tr><td class='indent'>Live Cattle</td><td>$249.95</td><td style='color:red'>▼ -0.35</td><td style='color:red'>-0.14%</td></tr>
+        <tr><td class='indent'>Feeder Cattle</td><td>$371.33</td><td style='color:red'>▼ -1.75</td><td style='color:red'>-0.47%</td></tr>
+        <tr><td class='indent'>Lean Hogs</td><td>$93.4</td><td style='color:red'>▼ -0.65</td><td style='color:red'>-0.69%</td></tr>
+        <tr class='cat-header'><td colspan='4'>Lumber & Forest</td></tr>
+        <tr><td class='indent'>Lumber</td><td colspan='3'>Data unavailable</td></tr>
+    </table></div>
 
-    <p class="updated">Last updated: 2026-04-18 14:05:04</p>
+    <p class="updated">Last updated: 2026-04-18 14:46:37</p>
 
     <script>
-    function showTab(name, btn) {
-        document.querySelectorAll('.tabcontent').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-        document.getElementById(name).classList.add('active');
-        btn.classList.add('active');
-    }
+        function showTab(event, name) {
+            document.querySelectorAll('.tabcontent').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.tabs button').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            document.getElementById(name).classList.add('active');
+            event.target.classList.add('active');
+        }
     </script>
 </body>
 </html>
