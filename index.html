@@ -23,23 +23,59 @@
 
         /* ── Tables ── */
         table      { border-collapse: collapse; width: 60%; background: white; }
-        table.wide { width: 75%; }
+        table.wide { width: 80%; }
         th, td     { padding: 12px 20px; border: 1px solid #ddd; text-align: left; }
         th         { background-color: #333; color: white; }
-        tr:hover   { background-color: #f1f1f1; }
+        tr:hover   { background-color: #f0f0f0; }
 
         /* ── Commodity category sub-headers ── */
         tr.cat-header td {
-            background-color: #555;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 0.04em;
-            padding: 8px 20px;
+            background-color: #555; color: white;
+            font-weight: bold; letter-spacing: 0.04em; padding: 8px 20px;
         }
         tr.cat-header:hover td { background-color: #555; }
 
-        /* ── Commodity name indent ── */
-        td.indent { padding-left: 32px; }
+        /* ── Clickable commodity rows ── */
+        tr.comm-row  { cursor: pointer; }
+        tr.comm-row.selected td { background-color: #e8f0fe; }
+        td.indent    { padding-left: 32px; }
+        td.chart-link {
+            color: #1a73e8; font-size: 12px; text-align: center;
+            white-space: nowrap;
+        }
+
+        /* ── Chart viewer panel ── */
+        #chart-panel {
+            display: none;
+            margin-top: 28px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px 24px;
+            width: 80%;
+        }
+        #chart-panel h3 {
+            margin: 0 0 14px 0; color: #333; font-size: 16px;
+        }
+
+        /* ── Period selector buttons ── */
+        .period-bar { margin-bottom: 14px; }
+        .period-bar button {
+            padding: 5px 12px; margin-right: 4px; cursor: pointer;
+            background: #eee; border: 1px solid #ccc;
+            border-radius: 3px; font-size: 13px;
+        }
+        .period-bar button.active {
+            background: #333; color: white; border-color: #333;
+        }
+
+        #chart-img {
+            width: 100%; max-width: 960px;
+            border: 1px solid #eee; border-radius: 4px;
+        }
+        #chart-missing {
+            display: none; color: #888; font-size: 14px; padding: 20px 0;
+        }
 
         .updated { margin-top: 12px; font-size: 13px; color: #888; }
     </style>
@@ -52,7 +88,7 @@
         <button onclick="showTab(event,'commodities')">Commodities</button>
     </div>
 
-    <div id="stocks"      class="tabcontent active">    <table>
+    <div id="stocks" class="tabcontent active">    <table>
         <tr><th>Ticker</th><th>Price</th><th>Change</th><th>% Change</th></tr>
         <tr><td>AAPL</td><td>$271.06</td><td style='color:red'>▼ -2.37</td><td style='color:red'>-0.87%</td></tr>
         <tr><td>MSFT</td><td>$424.6</td><td style='color:green'>▲ 8.85</td><td style='color:green'>2.13%</td></tr>
@@ -60,58 +96,157 @@
         <tr><td>GOOGL</td><td>$344.4</td><td style='color:green'>▲ 5.51</td><td style='color:green'>1.63%</td></tr>
         <tr><td>AMZN</td><td>$263.99</td><td style='color:green'>▲ 8.91</td><td style='color:green'>3.49%</td></tr>
     </table></div>
-    <div id="commodities" class="tabcontent">    <table class='wide'>
-        <tr><th>Commodity</th><th>Price</th><th>Change</th><th>% Change</th></tr>
-        <tr class='cat-header'><td colspan='4'>Energy</td></tr>
-        <tr><td class='indent'>Crude Oil (WTI)</td><td>$94.84</td><td style='color:red'>▼ -1.01</td><td style='color:red'>-1.05%</td></tr>
-        <tr><td class='indent'>Crude Oil (Brent)</td><td>$99.82</td><td style='color:red'>▼ -5.25</td><td style='color:red'>-5.0%</td></tr>
-        <tr><td class='indent'>Natural Gas</td><td>$2.68</td><td style='color:green'>▲ 0.07</td><td style='color:green'>2.68%</td></tr>
-        <tr><td class='indent'>Gasoline (RBOB)</td><td>$3.35</td><td style='color:red'>▼ -0.11</td><td style='color:red'>-3.18%</td></tr>
-        <tr><td class='indent'>Heating Oil</td><td>$3.84</td><td style='color:red'>▼ -0.15</td><td style='color:red'>-3.76%</td></tr>
-        <tr class='cat-header'><td colspan='4'>Precious Metals</td></tr>
-        <tr><td class='indent'>Gold</td><td>$4731.7</td><td style='color:green'>▲ 26.6</td><td style='color:green'>0.57%</td></tr>
-        <tr><td class='indent'>Silver</td><td>$76.01</td><td style='color:green'>▲ 0.55</td><td style='color:green'>0.73%</td></tr>
-        <tr><td class='indent'>Platinum</td><td>$2022.7</td><td style='color:green'>▲ 0.1</td><td style='color:green'>0.0%</td></tr>
-        <tr><td class='indent'>Palladium</td><td>$1508.5</td><td style='color:green'>▲ 23.9</td><td style='color:green'>1.61%</td></tr>
-        <tr class='cat-header'><td colspan='4'>Industrial Metals</td></tr>
-        <tr><td class='indent'>Copper</td><td>$6.03</td><td style='color:red'>▼ -0.05</td><td style='color:red'>-0.82%</td></tr>
-        <tr><td class='indent'>Aluminum</td><td>$3557.5</td><td style='color:red'>▼ -59.25</td><td style='color:red'>-1.64%</td></tr>
-        <tr><td class='indent'>Steel (HRC)</td><td colspan='3'>Data unavailable</td></tr>
-        <tr class='cat-header'><td colspan='4'>Grains & Oilseeds</td></tr>
-        <tr><td class='indent'>Wheat</td><td>$616.25</td><td style='color:green'>▲ 5.5</td><td style='color:green'>0.9%</td></tr>
-        <tr><td class='indent'>Corn</td><td>$463.5</td><td style='color:green'>▲ 8.0</td><td style='color:green'>1.76%</td></tr>
-        <tr><td class='indent'>Soybeans</td><td>$1176.75</td><td style='color:green'>▲ 17.0</td><td style='color:green'>1.47%</td></tr>
-        <tr><td class='indent'>Rough Rice</td><td>$11.16</td><td style='color:red'>▼ -1090.34</td><td style='color:red'>-98.99%</td></tr>
-        <tr><td class='indent'>Oats</td><td>$338.25</td><td style='color:green'>▲ 17.75</td><td style='color:green'>5.54%</td></tr>
-        <tr><td class='indent'>Soybean Oil</td><td>$71.24</td><td style='color:red'>▼ -0.42</td><td style='color:red'>-0.59%</td></tr>
-        <tr><td class='indent'>Soybean Meal</td><td>$319.1</td><td style='color:red'>▼ -1.5</td><td style='color:red'>-0.47%</td></tr>
-        <tr class='cat-header'><td colspan='4'>Soft Commodities</td></tr>
-        <tr><td class='indent'>Coffee</td><td>$294.85</td><td style='color:red'>▼ -21.5</td><td style='color:red'>-6.8%</td></tr>
-        <tr><td class='indent'>Cocoa</td><td>$3437.0</td><td style='color:green'>▲ 68.0</td><td style='color:green'>2.02%</td></tr>
-        <tr><td class='indent'>Sugar</td><td>$14.1</td><td style='color:green'>▲ 0.5</td><td style='color:green'>3.68%</td></tr>
-        <tr><td class='indent'>Cotton</td><td>$79.32</td><td style='color:green'>▲ 2.52</td><td style='color:green'>3.28%</td></tr>
-        <tr><td class='indent'>Orange Juice</td><td>$161.9</td><td style='color:green'>▲ 4.65</td><td style='color:green'>2.96%</td></tr>
-        <tr class='cat-header'><td colspan='4'>Livestock</td></tr>
-        <tr><td class='indent'>Live Cattle</td><td>$244.88</td><td style='color:red'>▼ -2.19</td><td style='color:red'>-0.89%</td></tr>
-        <tr><td class='indent'>Feeder Cattle</td><td>$360.95</td><td style='color:red'>▼ -5.67</td><td style='color:red'>-1.55%</td></tr>
-        <tr><td class='indent'>Lean Hogs</td><td>$101.9</td><td style='color:green'>▲ 6.25</td><td style='color:green'>6.53%</td></tr>
-        <tr class='cat-header'><td colspan='4'>Lumber & Forest</td></tr>
-        <tr><td class='indent'>Lumber</td><td colspan='3'>Data unavailable</td></tr>
-    </table></div>
 
-    <p class="updated">Last updated: 2026-04-24 16:05:04</p>
+    <div id="commodities" class="tabcontent">
+            <table class='wide'>
+        <tr><th>Commodity</th><th>Price</th><th>Change</th><th>% Change</th><th></th></tr>
+        <tr class='cat-header'><td colspan='5'>Energy</td></tr>
+        <tr class='comm-row' onclick="openChart('Crude Oil (WTI)')"><td class='indent'>Crude Oil (WTI)</td><td>$94.87</td><td style='color:red'>▼ -0.98</td><td style='color:red'>-1.02%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Crude Oil (Brent)')"><td class='indent'>Crude Oil (Brent)</td><td>$99.95</td><td style='color:red'>▼ -5.12</td><td style='color:red'>-4.87%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Natural Gas')"><td class='indent'>Natural Gas</td><td>$2.68</td><td style='color:green'>▲ 0.07</td><td style='color:green'>2.68%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Gasoline (RBOB)')"><td class='indent'>Gasoline (RBOB)</td><td>$3.35</td><td style='color:red'>▼ -0.11</td><td style='color:red'>-3.18%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Heating Oil')"><td class='indent'>Heating Oil</td><td>$3.84</td><td style='color:red'>▼ -0.15</td><td style='color:red'>-3.76%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Precious Metals</td></tr>
+        <tr class='comm-row' onclick="openChart('Gold')"><td class='indent'>Gold</td><td>$4728.0</td><td style='color:green'>▲ 22.9</td><td style='color:green'>0.49%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Silver')"><td class='indent'>Silver</td><td>$75.91</td><td style='color:green'>▲ 0.45</td><td style='color:green'>0.6%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Platinum')"><td class='indent'>Platinum</td><td>$2022.0</td><td style='color:red'>▼ -0.6</td><td style='color:red'>-0.03%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Palladium')"><td class='indent'>Palladium</td><td>$1509.0</td><td style='color:green'>▲ 24.4</td><td style='color:green'>1.64%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Industrial Metals</td></tr>
+        <tr class='comm-row' onclick="openChart('Copper')"><td class='indent'>Copper</td><td>$6.03</td><td style='color:red'>▼ -0.05</td><td style='color:red'>-0.82%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Aluminum')"><td class='indent'>Aluminum</td><td>$3557.5</td><td style='color:red'>▼ -59.25</td><td style='color:red'>-1.64%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Steel (HRC)')"><td class='indent'>Steel (HRC)</td><td colspan='3'>Data unavailable</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Grains & Oilseeds</td></tr>
+        <tr class='comm-row' onclick="openChart('Wheat')"><td class='indent'>Wheat</td><td>$616.25</td><td style='color:green'>▲ 5.5</td><td style='color:green'>0.9%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Corn')"><td class='indent'>Corn</td><td>$463.5</td><td style='color:green'>▲ 8.0</td><td style='color:green'>1.76%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Soybeans')"><td class='indent'>Soybeans</td><td>$1176.75</td><td style='color:green'>▲ 17.0</td><td style='color:green'>1.47%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Rough Rice')"><td class='indent'>Rough Rice</td><td>$11.16</td><td style='color:red'>▼ -1090.34</td><td style='color:red'>-98.99%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Oats')"><td class='indent'>Oats</td><td>$338.25</td><td style='color:green'>▲ 17.75</td><td style='color:green'>5.54%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Soybean Oil')"><td class='indent'>Soybean Oil</td><td>$71.24</td><td style='color:red'>▼ -0.42</td><td style='color:red'>-0.59%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Soybean Meal')"><td class='indent'>Soybean Meal</td><td>$319.1</td><td style='color:red'>▼ -1.5</td><td style='color:red'>-0.47%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Soft Commodities</td></tr>
+        <tr class='comm-row' onclick="openChart('Coffee')"><td class='indent'>Coffee</td><td>$294.85</td><td style='color:red'>▼ -21.5</td><td style='color:red'>-6.8%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Cocoa')"><td class='indent'>Cocoa</td><td>$3437.0</td><td style='color:green'>▲ 68.0</td><td style='color:green'>2.02%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Sugar')"><td class='indent'>Sugar</td><td>$14.1</td><td style='color:green'>▲ 0.5</td><td style='color:green'>3.68%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Cotton')"><td class='indent'>Cotton</td><td>$79.32</td><td style='color:green'>▲ 2.52</td><td style='color:green'>3.28%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Orange Juice')"><td class='indent'>Orange Juice</td><td>$161.9</td><td style='color:green'>▲ 4.65</td><td style='color:green'>2.96%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Livestock</td></tr>
+        <tr class='comm-row' onclick="openChart('Live Cattle')"><td class='indent'>Live Cattle</td><td>$244.88</td><td style='color:red'>▼ -2.19</td><td style='color:red'>-0.89%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Feeder Cattle')"><td class='indent'>Feeder Cattle</td><td>$360.95</td><td style='color:red'>▼ -5.67</td><td style='color:red'>-1.55%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='comm-row' onclick="openChart('Lean Hogs')"><td class='indent'>Lean Hogs</td><td>$101.9</td><td style='color:green'>▲ 6.25</td><td style='color:green'>6.53%</td><td class='chart-link'>Chart</td></tr>
+        <tr class='cat-header'><td colspan='5'>Lumber & Forest</td></tr>
+        <tr class='comm-row' onclick="openChart('Lumber')"><td class='indent'>Lumber</td><td colspan='3'>Data unavailable</td><td class='chart-link'>Chart</td></tr>
+    </table>
+
+        <!-- ── Chart viewer ─────────────────────────────────────── -->
+        <div id="chart-panel">
+            <h3 id="chart-title"></h3>
+            <div class="period-bar"><button onclick="setPeriod('1D')" id="pbtn-1D">1D</button> <button onclick="setPeriod('3D')" id="pbtn-3D">3D</button> <button onclick="setPeriod('5D')" id="pbtn-5D">5D</button> <button onclick="setPeriod('1M')" id="pbtn-1M">1M</button> <button onclick="setPeriod('1Y')" id="pbtn-1Y">1Y</button> <button onclick="setPeriod('3Y')" id="pbtn-3Y">3Y</button> <button onclick="setPeriod('5Y')" id="pbtn-5Y">5Y</button> <button onclick="setPeriod('10Y')" id="pbtn-10Y">10Y</button> <button onclick="setPeriod('15Y')" id="pbtn-15Y">15Y</button> <button onclick="setPeriod('20Y')" id="pbtn-20Y">20Y</button></div>
+            <img id="chart-img" src="" alt="price chart">
+            <p id="chart-missing">Chart not available for this period.</p>
+        </div>
+    </div>
+
+    <p class="updated">Last updated: 2026-04-24 16:14:30</p>
 
     <script>
+        // Map of display name -> chart folder path (generated by Python)
+        const CHART_PATHS = {
+  "Crude Oil (WTI)": "charts/Energy/Crude_Oil_WTI",
+  "Crude Oil (Brent)": "charts/Energy/Crude_Oil_Brent",
+  "Natural Gas": "charts/Energy/Natural_Gas",
+  "Gasoline (RBOB)": "charts/Energy/Gasoline_RBOB",
+  "Heating Oil": "charts/Energy/Heating_Oil",
+  "Gold": "charts/Precious_Metals/Gold",
+  "Silver": "charts/Precious_Metals/Silver",
+  "Platinum": "charts/Precious_Metals/Platinum",
+  "Palladium": "charts/Precious_Metals/Palladium",
+  "Copper": "charts/Industrial_Metals/Copper",
+  "Aluminum": "charts/Industrial_Metals/Aluminum",
+  "Steel (HRC)": "charts/Industrial_Metals/Steel_HRC",
+  "Wheat": "charts/Grains_&_Oilseeds/Wheat",
+  "Corn": "charts/Grains_&_Oilseeds/Corn",
+  "Soybeans": "charts/Grains_&_Oilseeds/Soybeans",
+  "Rough Rice": "charts/Grains_&_Oilseeds/Rough_Rice",
+  "Oats": "charts/Grains_&_Oilseeds/Oats",
+  "Soybean Oil": "charts/Grains_&_Oilseeds/Soybean_Oil",
+  "Soybean Meal": "charts/Grains_&_Oilseeds/Soybean_Meal",
+  "Coffee": "charts/Soft_Commodities/Coffee",
+  "Cocoa": "charts/Soft_Commodities/Cocoa",
+  "Sugar": "charts/Soft_Commodities/Sugar",
+  "Cotton": "charts/Soft_Commodities/Cotton",
+  "Orange Juice": "charts/Soft_Commodities/Orange_Juice",
+  "Live Cattle": "charts/Livestock/Live_Cattle",
+  "Feeder Cattle": "charts/Livestock/Feeder_Cattle",
+  "Lean Hogs": "charts/Livestock/Lean_Hogs",
+  "Lumber": "charts/Lumber_&_Forest/Lumber"
+};
+
+        const PERIODS     = ["1D","3D","5D","1M","1Y","3Y","5Y","10Y","15Y","20Y"];
+        let   activeName  = null;
+        let   activePeriod = "1Y";
+
+        // ── Tab switching ───────────────────────────────────────────────────
         function showTab(event, name) {
-            document.querySelectorAll('.tabcontent').forEach(function(t) {
-                t.classList.remove('active');
-            });
-            document.querySelectorAll('.tabs button').forEach(function(b) {
-                b.classList.remove('active');
-            });
+            document.querySelectorAll('.tabcontent').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
             document.getElementById(name).classList.add('active');
             event.target.classList.add('active');
         }
+
+        // ── Open chart for a commodity ──────────────────────────────────────
+        function openChart(name) {
+            // Deselect previous row
+            document.querySelectorAll('tr.comm-row.selected')
+                    .forEach(r => r.classList.remove('selected'));
+
+            // Select clicked row
+            event.currentTarget.classList.add('selected');
+
+            activeName = name;
+            document.getElementById('chart-title').textContent = name;
+            document.getElementById('chart-panel').style.display = 'block';
+            loadChart();
+        }
+
+        // ── Switch period ───────────────────────────────────────────────────
+        function setPeriod(period) {
+            activePeriod = period;
+            loadChart();
+        }
+
+        // ── Load the img for the active commodity + period ──────────────────
+        function loadChart() {
+            // Highlight active period button
+            PERIODS.forEach(p => {
+                const btn = document.getElementById('pbtn-' + p);
+                if (btn) btn.classList.toggle('active', p === activePeriod);
+            });
+
+            if (!activeName || !CHART_PATHS[activeName]) return;
+
+            const src = CHART_PATHS[activeName] + '/' + activePeriod + '.png';
+            const img = document.getElementById('chart-img');
+            const miss = document.getElementById('chart-missing');
+
+            img.style.display = 'none';
+            miss.style.display = 'none';
+
+            const probe = new Image();
+            probe.onload = function() {
+                img.src  = src;
+                img.style.display = 'block';
+            };
+            probe.onerror = function() {
+                miss.style.display = 'block';
+            };
+            probe.src = src;
+        }
+
+        // Set default active period button on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('pbtn-' + activePeriod);
+            if (btn) btn.classList.add('active');
+        });
     </script>
 </body>
 </html>
